@@ -54,15 +54,15 @@ var GIF_NON = "leon-tigre.gif";
 var GIF_OUI = "leon-rose.gif";
 
 var NON = [
-  {t:"Error 404 : réponse introuvable. Veuillez réessayer.", cls:"err", s:"🛠️"},
-  {t:"Réponse refusée, le Requiem va te faire la peau.", s:'<span class="bang">💥</span>🔫🕴️', gif:"non", shake:true},
-  {t:"Notre détecteur de mensonges a sonné. Réessayez.", s:"🚨"},
-  {t:"Le bouton « Non » est en maintenance. Merci de cliquer sur « Oui ».", s:"🔧"},
-  {t:"Même l’agent est sûr que c’est faux.", s:"🕶️"},
-  {t:"Tu insistes ? Le bouton « Non » démissionne.", s:"📄"},
-  {t:"Dernier avertissement : sans réponse « Oui », le système répond à ta place.", s:"⏳", last:true}
+  {t:"Error 404 : réponse introuvable. Veuillez réessayer.", cls:"err", s:"🛠️", gifSrc:GIF_NON},
+  {t:"Réponse refusée, le Requiem va te faire la peau.", s:'<span class="bang">💥</span>🔫🕴️', gifSrc:GIF_, shake:true},
+  {t:"Notre détecteur de mensonges a sonné. Réessayez.", s:"🚨", gifSrc:GIF_NON},
+  {t:"Le bouton « Non » est en maintenance. Merci de cliquer sur « Oui ».", s:"🔧", gifSrc:GIF_NON},
+  {t:"Même l’agent est sûr que c’est faux.", s:"🕶️", gifSrc:GIF_NON},
+  {t:"Tu insistes ? Le bouton « Non » démissionne.", s:"📄", gif:"non", gifSrc:GIF_NON},
+  {t:"Dernier avertissement : sans réponse « Oui », le système répond à ta place.", s:"⏳", last:true, gifSrc:GIF_NON}
 ];
-var timer = null, n = 0, out = document.getElementById("out"), non = document.getElementById("non"), oui = document.getElementById("oui");
+var timer = null, n = 0, out = document.getElementById("out"), non = document.getElementById("non"), oui = document.getElementById("oui"), gifSrc:GIF_OUI;
 
 function gif(src){ return src ? '<img class="gif" alt="" src="'+src+'">' : ""; }
 
