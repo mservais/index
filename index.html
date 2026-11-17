@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>QCM très sérieux</title>
+<style>
+:root{--bg:#fff0f3;--card:#ffffff;--ink:#3b0a1e;--muted:#8a4b61;--rose:#e11d63;--rose2:#be123c;--line:#f7c6d4;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1c0610;--card:#2a0b18;--ink:#ffe4ec;--muted:#e9a1b8;--line:#5a1a35}}
+:root[data-theme="dark"]{--bg:#1c0610;--card:#2a0b18;--ink:#ffe4ec;--muted:#e9a1b8;--line:#5a1a35}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font-family:"Trebuchet MS","Segoe UI",system-ui,sans-serif;display:flex;align-items:center;justify-content:center;padding:20px}
+.card{width:100%;max-width:440px;background:var(--card);border:2px solid var(--line);border-radius:22px;padding:28px 22px;text-align:center}
+h1{font-size:1.55rem;line-height:1.25;margin:0 0 6px}
+.sub{color:var(--muted);font-size:.9rem;margin:0 0 22px}
+.btns{display:flex;gap:12px;justify-content:center;align-items:center;flex-wrap:wrap}
+button{font:inherit;font-weight:700;border:0;border-radius:14px;padding:14px 28px;cursor:pointer;transition:transform .15s}
+button:active{transform:scale(.95)}
+button:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+#oui{background:var(--rose);color:#fff}
+#non{background:transparent;color:var(--muted);border:2px solid var(--line)}
+#out{margin-top:24px;min-height:120px}
+.msg{font-size:1.15rem;font-weight:700;margin:10px 0 0}
+.err{font-family:ui-monospace,Menlo,monospace;color:var(--rose2)}
+.scene{font-size:3.4rem;line-height:1.1;margin:0}
+.flash{animation:shake .4s 2}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.rose{display:inline-block;animation:fly 1.2s ease-out forwards}
+@keyframes fly{from{transform:translateX(-90px) rotate(-30deg);opacity:0}to{transform:none;opacity:1}}
+.bang{display:inline-block;animation:pop .5s ease-out infinite alternate}
+@keyframes pop{from{transform:scale(.7)}to{transform:scale(1.25)}}
+img.gif{max-width:100%;border-radius:12px;margin-top:8px}
+.heart{position:fixed;top:-30px;font-size:1.6rem;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(40deg)}}
+.shake-loop{animation:shake .35s infinite}
+.count{font-size:2.8rem;font-weight:800;color:var(--rose2);margin:6px 0 0}
+@media (prefers-reduced-motion:reduce){.flash,.shake-loop,.rose,.bang,.heart{animation:none}}
+</style>
+</head>
+<body>
+<main class="card">
+  <h1>Est-ce que t’es amoureux de moua ?</h1>
+  <p class="sub">Une seule réponse possible (ou presque).</p>
+  <div class="btns">
+    <button id="oui">Oui</button>
+    <button id="non">Non</button>
+  </div>
+  <div id="out" aria-live="polite"></div>
+</main>
+<script>
+// Pour utiliser tes propres GIF : colle une adresse de GIF (ou une data:URI) entre les guillemets.
+var GIF_NON = "";
+var GIF_OUI = "";
+
+var NON = [
+  {t:"Error 404 : réponse introuvable. Veuillez réessayer.", cls:"err", s:"🛠️"},
+  {t:"Réponse refusée, le Requiem va te faire la peau.", s:'<span class="bang">💥</span>🔫🕴️', gif:"non", shake:true},
+  {t:"Notre détecteur de mensonges a sonné. Réessayez.", s:"🚨"},
+  {t:"Le bouton « Non » est en maintenance. Merci de cliquer sur « Oui ».", s:"🔧"},
+  {t:"Même l’agent est sûr que c’est faux.", s:"🕶️"},
+  {t:"Tu insistes ? Le bouton « Non » démissionne.", s:"📄"},
+  {t:"Dernier avertissement : sans réponse « Oui », le système répond à ta place.", s:"⏳", last:true}
+];
+var timer = null, n = 0, out = document.getElementById("out"), non = document.getElementById("non"), oui = document.getElementById("oui");
+
+function gif(src){ return src ? '<img class="gif" alt="" src="'+src+'">' : ""; }
+
+non.addEventListener("click", function(){
+  var m = NON[Math.min(n, NON.length - 1)];
+  var extra = n >= NON.length ? " (tentative n°" + (n+1) + ")" : "";
+  out.innerHTML = (gif(m.gif === "non" ? GIF_NON : "") || '<p class="scene">'+m.s+'</p>')
+    + '<p class="msg '+(m.cls||"")+'">'+m.t+extra+'</p>';
+  var card = document.querySelector(".card");
+  clearInterval(timer); card.classList.remove("shake-loop");
+  if (m.shake) { card.classList.remove("flash"); void card.offsetWidth; card.classList.add("flash"); }
+  if (m.last) {
+    var left = 10;
+    card.classList.remove("flash"); card.classList.add("shake-loop");
+    out.insertAdjacentHTML("beforeend", '<p class="count" id="cd">10</p>');
+    timer = setInterval(function(){
+      left--; var e = document.getElementById("cd"); if (e) e.textContent = left;
+      if (left <= 0) { clearInterval(timer); card.classList.remove("shake-loop"); oui.click(); }
+    }, 1000);
+  }
+  n++;
+  non.style.transform = "scale(" + Math.max(.35, 1 - n * .1) + ")";
+  oui.style.transform = "scale(" + Math.min(1.6, 1 + n * .08) + ")";
+});
+
+oui.addEventListener("click", function(){
+  clearInterval(timer); document.querySelector(".card").classList.remove("shake-loop");
+  non.style.display = "none"; oui.style.display = "none";
+  out.innerHTML = (gif(GIF_OUI) || '<p class="scene"><span class="rose">🌹</span>🕴️</p>')
+    + '<p class="msg">Bravo baboui, la dot à 50k ! 💍</p>';
+  for (var i = 0; i < 24; i++) {
+    var h = document.createElement("div");
+    h.className = "heart"; h.textContent = ["💖","❤️","🌹"][i % 3];
+    h.style.left = Math.random() * 100 + "vw";
+    h.style.animationDuration = (2 + Math.random() * 2.5) + "s";
+    h.style.animationDelay = Math.random() * 1.2 + "s";
+    document.body.appendChild(h);
+    setTimeout(function(e){ e.remove(); }.bind(null, h), 6000);
+  }
+});
+</script>
+</body>
+</html>
