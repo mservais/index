@@ -50,26 +50,26 @@ img.gif{max-width:100%;border-radius:12px;margin-top:8px}
 </main>
 <script>
 // Pour utiliser tes propres GIF : colle une adresse de GIF (ou une data:URI) entre les guillemets.
-var GIF_NON = "leon-tigre.gif";
+var GIF_NON = "leon-tire.gif";
 var GIF_OUI = "leon-rose.gif";
 
 var NON = [
   {t:"Error 404 : réponse introuvable. Veuillez réessayer.", cls:"err", s:"🛠️", gifSrc:GIF_NON},
-  {t:"Réponse refusée, le Requiem va te faire la peau.", s:'<span class="bang">💥</span>🔫🕴️', gifSrc:GIF_, shake:true},
+  {t:"Réponse refusée, le Requiem va te faire la peau.", s:'<span class="bang">💥</span>🔫🕴️', gifSrc:GIF_NON, shake:true},
   {t:"Notre détecteur de mensonges a sonné. Réessayez.", s:"🚨", gifSrc:GIF_NON},
   {t:"Le bouton « Non » est en maintenance. Merci de cliquer sur « Oui ».", s:"🔧", gifSrc:GIF_NON},
-  {t:"Même l’agent est sûr que c’est faux.", s:"🕶️", gifSrc:GIF_NON},
+  {t:"Même Léon est sûr que c’est faux.", s:"🕶️", gifSrc:GIF_NON},
   {t:"Tu insistes ? Le bouton « Non » démissionne.", s:"📄", gif:"non", gifSrc:GIF_NON},
   {t:"Dernier avertissement : sans réponse « Oui », le système répond à ta place.", s:"⏳", last:true, gifSrc:GIF_NON}
 ];
-var timer = null, n = 0, out = document.getElementById("out"), non = document.getElementById("non"), oui = document.getElementById("oui"), gifSrc:GIF_OUI;
+var timer = null, n = 0, out = document.getElementById("out"), non = document.getElementById("non"), oui = document.getElementById("oui");
 
 function gif(src){ return src ? '<img class="gif" alt="" src="'+src+'">' : ""; }
 
 non.addEventListener("click", function(){
   var m = NON[Math.min(n, NON.length - 1)];
   var extra = n >= NON.length ? " (tentative n°" + (n+1) + ")" : "";
-  out.innerHTML = gif(m.gifSrc) || '<p class="scene">'+m.s+'</p>')
+  out.innerHTML = (gif(m.gifSrc) || '<p class="scene">'+m.s+'</p>')
     + '<p class="msg '+(m.cls||"")+'">'+m.t+extra+'</p>';
   var card = document.querySelector(".card");
   clearInterval(timer); card.classList.remove("shake-loop");
