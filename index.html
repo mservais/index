@@ -69,7 +69,7 @@ function gif(src){ return src ? '<img class="gif" alt="" src="'+src+'">' : ""; }
 non.addEventListener("click", function(){
   var m = NON[Math.min(n, NON.length - 1)];
   var extra = n >= NON.length ? " (tentative n°" + (n+1) + ")" : "";
-  out.innerHTML = (gif(m.gif === "non" ? GIF_NON : "") || '<p class="scene">'+m.s+'</p>')
+  out.innerHTML = gif(m.gifSrc) || '<p class="scene">'+m.s+'</p>')
     + '<p class="msg '+(m.cls||"")+'">'+m.t+extra+'</p>';
   var card = document.querySelector(".card");
   clearInterval(timer); card.classList.remove("shake-loop");
